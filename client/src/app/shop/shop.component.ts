@@ -12,7 +12,7 @@ import { ShopService } from './shop.service';
 })
 export class ShopComponent implements OnInit {
   
-  @ViewChild('search', { static: true }) searchTerm!: ElementRef;
+  @ViewChild('search', { static: false }) searchTerm!: ElementRef; // element will be get after it is loaded
 
   products: IProduct[] = [];
   brands: IBrand[] = [];
@@ -36,6 +36,7 @@ export class ShopComponent implements OnInit {
   }
   
   getProducts(){
+    //http call is finite so we dont have to unsubscribe
     this.shopService.getProducts(this.shopParams).subscribe((response) => {
       this.products = response == null ? [] : response.data;
       this.shopParams.pageNumber = response?.pageIndex == null ? 0 : response.pageIndex;
