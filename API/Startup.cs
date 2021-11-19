@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using API.Helpers;
 using API.Middleware;
 using API.Extensions;
+using StackExchange.Redis;
 
 namespace API
 {
@@ -35,6 +36,11 @@ namespace API
             services.AddControllers();
             services.AddDbContext<StoreContext>(x => x.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
 
+
+            services.AddSingleton<IConnectionMultiplexer>( c => {
+                var redis = ConnectionMultiplexer.Connect(Configuration.GetConnectionString("Redis"));
+                return redis;
+            });
             services.AddApplicationServices();
             services.AddSwaggerDocumentation();          
             
